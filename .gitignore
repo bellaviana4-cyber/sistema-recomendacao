@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+data/raw/
+outputs/tables/*_predictions.csv
+outputs/tables/*_top10.csv
+outputs/tables/fold_assignment.csv
+outputs/tables/*_example_history.csv
