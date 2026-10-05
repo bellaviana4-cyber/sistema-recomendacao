@@ -1,0 +1,11 @@
+{
+  "integridade": "aprovada",
+  "folds_disjuntos": "aprovados",
+  "validacao_interna_isolada": "aprovada",
+  "usuarios_elegiveis_identicos": "aprovados",
+  "top10_sem_duplicatas_ou_historico": "aprovado",
+  "metricas_recalculadas": "aprovadas",
+  "lote_equivalente_surprise": "aprovado",
+  "notebooks_executados_sem_erros": "aprovados",
+  "kernel_delivery": "IPython InProcessKernelManager, processo novo por notebook"
+}

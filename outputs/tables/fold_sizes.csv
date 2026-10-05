@@ -1,0 +1,6 @@
+fold,n_train,n_test,n_train_users,n_train_items,n_unknown_users,n_unknown_items,n_test_ratings_unknown_item
+1,80000,20000,943,1648,0,34,41
+2,80000,20000,943,1646,0,36,38
+3,80000,20000,943,1651,0,31,34
+4,80000,20000,943,1654,0,28,31
+5,80000,20000,943,1650,0,32,40
