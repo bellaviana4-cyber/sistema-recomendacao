@@ -91,9 +91,9 @@ def score_matrix(algo):
         assert np.isclose(scores[u,i],algo.predict(int(us[u]),int(it[i])).est,atol=1e-10)
     return us,it,scores,nk
 
-def ranking(algo,train,test,kind,fold,variant):
+def ranking(algo,train,test,kind,fold,variant,popularity_counts=None):
     if kind=='Popularidade':
-        us=np.sort(train.user_id.unique()); counts=train.item_id.value_counts()
+        us=np.sort(train.user_id.unique()); counts=train.item_id.value_counts() if popularity_counts is None else popularity_counts
         it=np.sort(counts.index.values); scores=np.broadcast_to(counts.reindex(it).values,(len(us),len(it)))
         nk=None
     else: us,it,scores,nk=score_matrix(algo)
@@ -135,11 +135,15 @@ def evaluate(kind,ratings):
             best=int(np.argmin(values)); variants=[('inicial',kind,CONFIGS[kind][0]),('ajustado',kind,CONFIGS[kind][best])]
         tr=trainset(train)
         for variant,label,c in variants:
-            start=time.perf_counter(); a=None if c is None else model(kind,c).fit(tr); fit=time.perf_counter()-start
+            start=time.perf_counter()
+            a=None if c is None else model(kind,c).fit(tr)
+            global_mean=train.rating.mean() if label=='Média global' else None
+            popularity_counts=train.item_id.value_counts() if label=='Popularidade' else None
+            fit=time.perf_counter()-start
             start=time.perf_counter(); loss=np.nan; p10=np.nan; fallback=np.nan; rankfallback=np.nan; n=0
             if label!='Popularidade':
                 pp=None if a is None else a.test(list(test[['user_id','item_id','rating']].itertuples(index=False,name=None)))
-                estimates=np.repeat(train.rating.mean(),len(test)) if a is None else np.array([p.est for p in pp])
+                estimates=np.repeat(global_mean,len(test)) if a is None else np.array([p.est for p in pp])
                 fallback=0 if pp is None else np.mean([p.details.get('was_impossible',False) for p in pp])
                 loss=rmse(test.rating,estimates)
                 pr=test.copy(); pr['prediction']=estimates; pr['fold']=fold; pr['model']=label; pr['variant']=variant
@@ -149,7 +153,7 @@ def evaluate(kind,ratings):
                 pr['actual_k']=np.nan if pp is None else [p.details.get('actual_k',np.nan) for p in pp]
                 preds.append(pr)
             if label!='Média global':
-                ad,tp,rankfallback=ranking(a,train,test,label,fold,variant); audits.append(ad); tops.append(tp)
+                ad,tp,rankfallback=ranking(a,train,test,label,fold,variant,popularity_counts); audits.append(ad); tops.append(tp)
                 p10=ad.precision10.mean(); n=int(ad.precision10.notna().sum())
             metrics.append(dict(fold=fold,model=label,variant=variant,rmse=loss,precision10=p10,n_users=n,fit_seconds=fit,evaluation_seconds=time.perf_counter()-start,fallback_test=fallback,fallback_candidates=rankfallback,unknown_users=int(missing_users.sum()),unknown_items=int(missing_items.sum()),params=json.dumps(c)))
         save(pd.DataFrame(metrics),kind+'_metrics')

@@ -38,12 +38,14 @@ for kind in ['SVD','KNN','Baselines']:
         assert not g.duplicated(['user_id','item_id']).any()
         seen=set(map(tuple,train[['user_id','item_id']].values))
         assert not seen & set(map(tuple,g[['user_id','item_id']].values))
+        assert set(g.item_id)<=set(train.item_id)
         relevant=set(map(tuple,test[test.rating>=4][['user_id','item_id']].values))
         hits=np.array([int((user,item) in relevant) for user,item in g[['user_id','item_id']].itertuples(index=False,name=None)])
         assert np.array_equal(hits,g.hit)
         precision_recomputed=g.groupby('user_id').hit.sum()/10
         a=ad[(ad.fold==fold)&(ad.variant==variant)&(ad.reason=='incluido')].set_index('user_id')
         assert np.allclose(precision_recomputed.sort_index(),a.precision10.sort_index())
+        assert set(precision_recomputed.index)==set(a.index)
 for path in sorted((ROOT/'notebooks').glob('*.ipynb')):
     nb=nbformat.read(path,4); nbformat.validate(nb)
     cells=[c for c in nb.cells if c.cell_type=='code']
