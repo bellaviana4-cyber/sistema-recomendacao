@@ -1,0 +1,31 @@
+activity,user_id,n_history,rank,item_id,score,title
+baixa,9,19,1,119,5.0,Maya Lin: A Strong Clear Vision (1994)
+baixa,9,19,2,1368,5.0,Mina Tannenbaum (1994)
+baixa,9,19,3,1449,4.6698071337130775,Pather Panchali (1955)
+baixa,9,19,4,64,4.633179194299647,"Shawshank Redemption, The (1994)"
+baixa,9,19,5,318,4.583394025067751,Schindler's List (1993)
+baixa,9,19,6,408,4.567931198939827,"Close Shave, A (1995)"
+baixa,9,19,7,169,4.484315667444683,"Wrong Trousers, The (1993)"
+baixa,9,19,8,12,4.483157830040686,"Usual Suspects, The (1995)"
+baixa,9,19,9,127,4.466388196037485,"Godfather, The (1972)"
+baixa,9,19,10,427,4.450031715812925,To Kill a Mockingbird (1962)
+intermediária,206,52,1,1368,4.735946764481178,Mina Tannenbaum (1994)
+intermediária,206,52,2,127,4.564558754184442,"Godfather, The (1972)"
+intermediária,206,52,3,1449,4.540018684807612,Pather Panchali (1955)
+intermediária,206,52,4,64,4.530961096100295,"Shawshank Redemption, The (1994)"
+intermediária,206,52,5,318,4.516256730563459,Schindler's List (1993)
+intermediária,206,52,6,50,4.498543489529576,Star Wars (1977)
+intermediária,206,52,7,1203,4.495110860948948,Top Hat (1935)
+intermediária,206,52,8,603,4.484249192863583,Rear Window (1954)
+intermediária,206,52,9,169,4.481933674693337,"Wrong Trousers, The (1993)"
+intermediária,206,52,10,320,4.48174166652506,Paradise Lost: The Child Murders at Robin Hood Hills (1996)
+alta,932,198,1,12,4.567198988253056,"Usual Suspects, The (1995)"
+alta,932,198,2,318,4.55046980201772,Schindler's List (1993)
+alta,932,198,3,127,4.516281310500276,"Godfather, The (1972)"
+alta,932,198,4,408,4.500443182479,"Close Shave, A (1995)"
+alta,932,198,5,187,4.433846387334491,"Godfather: Part II, The (1974)"
+alta,932,198,6,132,4.417081920430871,"Wizard of Oz, The (1939)"
+alta,932,198,7,50,4.41609909504933,Star Wars (1977)
+alta,932,198,8,657,4.400471891586073,"Manchurian Candidate, The (1962)"
+alta,932,198,9,56,4.3663410408308465,Pulp Fiction (1994)
+alta,932,198,10,124,4.332657092505167,Lone Star (1996)

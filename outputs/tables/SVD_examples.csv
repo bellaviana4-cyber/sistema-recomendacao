@@ -1,0 +1,31 @@
+activity,user_id,n_history,rank,item_id,score,title
+baixa,9,19,1,408,4.922896304736815,"Close Shave, A (1995)"
+baixa,9,19,2,1449,4.872883964945351,Pather Panchali (1955)
+baixa,9,19,3,318,4.815765725252383,Schindler's List (1993)
+baixa,9,19,4,64,4.7788188633286195,"Shawshank Redemption, The (1994)"
+baixa,9,19,5,513,4.771400972635409,"Third Man, The (1949)"
+baixa,9,19,6,169,4.731105302094418,"Wrong Trousers, The (1993)"
+baixa,9,19,7,479,4.718389644244868,Vertigo (1958)
+baixa,9,19,8,251,4.7053105386561125,Shall We Dance? (1996)
+baixa,9,19,9,661,4.705132046762384,High Noon (1952)
+baixa,9,19,10,427,4.700772283237939,To Kill a Mockingbird (1962)
+intermediária,206,52,1,318,3.6379607792799513,Schindler's List (1993)
+intermediária,206,52,2,64,3.586734785500692,"Shawshank Redemption, The (1994)"
+intermediária,206,52,3,963,3.5608318954832088,Some Folks Call It a Sling Blade (1993)
+intermediária,206,52,4,515,3.512663717933873,"Boot, Das (1981)"
+intermediária,206,52,5,1137,3.4665265674730756,Beautiful Thing (1996)
+intermediária,206,52,6,483,3.43901755709088,Casablanca (1942)
+intermediária,206,52,7,316,3.4001761373018167,As Good As It Gets (1997)
+intermediária,206,52,8,320,3.3976920504224757,Paradise Lost: The Child Murders at Robin Hood Hills (1996)
+intermediária,206,52,9,134,3.3740998680759553,Citizen Kane (1941)
+intermediária,206,52,10,98,3.371647862882327,"Silence of the Lambs, The (1991)"
+alta,932,198,1,408,4.630675108611006,"Close Shave, A (1995)"
+alta,932,198,2,641,4.616944538126698,Paths of Glory (1957)
+alta,932,198,3,320,4.581557438317291,Paradise Lost: The Child Murders at Robin Hood Hills (1996)
+alta,932,198,4,318,4.577885591315835,Schindler's List (1993)
+alta,932,198,5,127,4.5533325432829415,"Godfather, The (1972)"
+alta,932,198,6,657,4.515676564318774,"Manchurian Candidate, The (1962)"
+alta,932,198,7,512,4.506734837016869,Wings of Desire (1987)
+alta,932,198,8,114,4.503020876265521,Wallace & Gromit: The Best of Aardman Animation (1996)
+alta,932,198,9,923,4.496390089864058,Raise the Red Lantern (1991)
+alta,932,198,10,191,4.479292802465871,Amadeus (1984)
