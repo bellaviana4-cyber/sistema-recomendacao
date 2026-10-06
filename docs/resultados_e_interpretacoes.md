@@ -49,7 +49,7 @@ Média ± desvio-padrão entre folds:
 
 Precisão 0,1332 significa cerca de **1,332 acertos observados por lista de dez**; SVD e KNN recuperaram cerca de **0,707** e **0,675**, respectivamente. A métrica não distingue a posição dos acertos na lista. Muitos filmes recomendados podem ser relevantes sem terem nota no teste, então não contam como acertos observados.
 
-O SVD treinou em média em aproximadamente **1,11 s** e avaliou em **0,54 s** por fold; o KNN treinou em **0,27 s** e avaliou em **5,12 s**. Esses tempos são específicos do ambiente e incluem processamento em lote e verificações; a busca interna tem custo separado nas tabelas. KNN treina rapidamente, mas consultar vizinhos para todo o catálogo custa mais. SVD utiliza fatores compactos e previsões por produto de vetores. Popularidade é barata e transparente.
+O SVD treinou em média em aproximadamente **1,20 s** e avaliou em **0,56 s** por fold; o KNN treinou em **0,31 s** e avaliou em **5,34 s**. Esses tempos são específicos do ambiente e incluem processamento em lote e verificações; a busca interna tem custo separado nas tabelas. KNN treina rapidamente, mas consultar vizinhos para todo o catálogo custa mais. SVD utiliza fatores compactos e previsões por produto de vetores. Popularidade é barata e transparente.
 
 ## 6. Escolha e limitações
 

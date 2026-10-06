@@ -1,4 +1,4 @@
-# sistema-recomenda-o
+# sistema-recomendacao
 
 ## Projeto final — Sistemas de Recomendação
 
