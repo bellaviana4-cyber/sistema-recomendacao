@@ -1,109 +1,185 @@
-# sistema-recomendacao
+# Recomendação de filmes com SVD e User-Based KNN
 
-## Projeto final — Sistemas de Recomendação
+Análise do **MovieLens 100k** e comparação de métodos para prever notas e recomendar filmes. O projeto investiga duas perguntas: qual modelo estima melhor as avaliações dos usuários e qual método recupera mais filmes relevantes em uma lista de dez recomendações?
 
-**Laboratório de Estatística Aplicada — 2026/2 · Professor Victor Coscrato**  
-**Isabella Viana Bambirra · Estatística/UFSCar**
+**Autora:** Isabella Viana Bambirra — graduação em Estatística na UFSCar  
+**Disciplina:** Laboratório de Estatística Aplicada — 2026/2  
+**Professor:** Victor Coscrato
 
-O projeto usa o MovieLens 100k para estudar avaliações explícitas e comparar **SVD/FunkSVD** e **User-Based KNN**, com **popularidade** como referencial de listas e **média global** como referencial de previsão de notas. Metadados servem apenas para descrição e apresentação dos filmes.
+[Relatório interativo](relatorio_sistemas_recomendacao_movielens.html) · [Notebooks](notebooks/) · [Resultados](docs/resultados_e_interpretacoes.md) · [Protocolo de avaliação](docs/protocolo_avaliacao.md)
 
-### Relatório interativo
+## O que foi desenvolvido
 
-O [relatório em HTML](relatorio_sistemas_recomendacao_movielens.html) reúne metodologia, análise descritiva, explicações dos modelos, diagnósticos, comparação e conclusão. Para usar as abas, filtros e exportações, baixe o arquivo e abra-o no navegador. O relatório funciona sem conexão à internet; somente os links para fontes externas exigem acesso à rede.
+- Análise descritiva da base: integridade, distribuição das notas, atividade dos usuários, popularidade dos filmes, perfis e esparsidade.
+- Fatorização matricial com **SVD da Surprise**, com vieses e fatores latentes aprendidos nas avaliações observadas.
+- Filtragem colaborativa com **User-Based KNN**, usando `KNNBasic` e similaridade cosseno.
+- Comparação com **média global**, para previsão de notas, e **popularidade**, para recomendação de listas.
+- Avaliação externa em cinco folds, ajuste de parâmetros dentro do treino e diagnósticos de erros, suporte e recomendações.
 
-### Ordem de leitura
+Os notebooks estão executados e incluem gráficos, tabelas e interpretações. O relatório reúne essas análises em uma apresentação interativa.
 
-1. [Análise descritiva](notebooks/01_analise_descritiva.ipynb): conferência da base, notas, perfis, atividade, filmes, gêneros, anos e esparsidade.
-2. [Fatorização matricial](notebooks/02_fatorizacao_matricial_svd.ipynb): fatores, vieses, validação, ajuste limitado, erros e recomendações.
-3. [User-Based KNN e comparação](notebooks/03_user_based_knn_comparacao.ipynb): cosseno, suporte, vizinhos, fallback, avaliação e conclusão.
+## A base
 
-Os três notebooks estão executados, com saídas, gráficos e interpretações específicas. Cada um inicia sua própria leitura e não usa variáveis da memória de outro notebook. O terceiro lê tabelas produzidas pelo segundo; execute na ordem.
+| Característica | MovieLens 100k |
+|---|---|
+| Avaliações | 100.000 |
+| Usuários | 943 |
+| Filmes | 1.682 |
+| Escala das notas | 1 a 5 estrelas |
+| Período das avaliações | 19/09/1997 a 22/04/1998, em UTC |
+| Células sem avaliação na matriz usuário × filme | 93,69% |
 
-### Resultados principais
+Uma nota ausente representa uma preferência desconhecida. Os modelos usam somente as avaliações observadas; a matriz não é preenchida com zeros. Idade, gênero, ocupação e características dos filmes são usados na análise descritiva, sem entrar como preditores.
 
-Média ± desvio-padrão amostral de **cinco folds externos**, para os modelos ajustados exclusivamente dentro dos respectivos treinos:
+## Principais resultados
 
-| Método | RMSE ↓ | Precisão@10 ↑ |
-|---|---:|---:|
-| SVD | 0,9223 ± 0,0061 | 0,0707 ± 0,0037 |
-| User-Based KNN | 1,0139 ± 0,0062 | 0,0675 ± 0,0121 |
-| Média global | 1,1257 ± 0,0073 | — |
-| Popularidade | — | 0,1332 ± 0,0038 |
+A tabela resume a **média e o desvio-padrão amostral dos cinco folds externos**, usando as configurações ajustadas por validação interna.
 
-O **SVD previu melhor as notas** em todos os folds. A **popularidade recuperou mais relevantes no top 10** em todos os folds; a personalização não superou esse baseline neste protocolo. Entre SVD e KNN, a diferença média de precisão é pequena e não estabelece superioridade estatística. O ajuste do SVD reduziu o RMSE, mas sua Precisão@10 caiu de 0,0743 para 0,0707. Isso ilustra que as duas métricas medem objetivos distintos.
+| Método | RMSE (estrelas) ↓ | DP do RMSE (milésimos de estrela) | Precisão no top 10 (%) ↑ | DP da precisão (p.p.) |
+|---|---:|---:|---:|---:|
+| SVD ajustado | 0,92 | 6,09 | 7,06 | 0,36 |
+| User-Based KNN ajustado | 1,01 | 6,15 | 6,74 | 1,21 |
+| Média global | 1,12 | 7,30 | — | — |
+| Popularidade | — | — | 13,32 | 0,38 |
 
-O ranking avaliou **929, 925, 921, 930 e 923 usuários** nos folds 1 a 5, sempre os mesmos entre os métodos. RMSE usou as 20 mil avaliações de cada teste. Foram encontrados filmes desconhecidos no treino, mas nenhum usuário desconhecido; IDs e contagens constam em `outputs/tables/cold_start_ids.csv` e `fold_sizes.csv`.
+**Como ler:** menor RMSE indica melhor previsão de notas; maior precisão indica mais relevantes observados entre os dez recomendados. O DP descreve a dispersão entre folds, não um intervalo de confiança. Apenas o DP do RMSE está em milésimos de estrela: 1.000 milésimos equivalem a 1 estrela. O traço indica uma métrica não aplicável.
 
-### Protocolo
+Os valores de apresentação são truncados em duas casas decimais. Os cálculos mantêm a precisão original, disponível em [comparison_summary.csv](outputs/tables/comparison_summary.csv); parâmetros como a taxa de aprendizagem 0,005 são preservados exatamente.
 
-- Cinco folds externos aleatórios de avaliações, semente **2026**, compartilhados pelos modelos.
-- Uma validação interna 80/20 por fold, semente **2026 + fold**, com três configurações por algoritmo. Seleção por **RMSE interno**, nunca pelo teste externo.
-- SVD inicial: 50 fatores, 20 épocas, regularização 0,02, taxa 0,005. Selecionado nos cinco folds: 100 fatores, 30 épocas, regularização 0,08, taxa 0,005.
-- KNNBasic inicial: `k=40, min_k=1, min_support=1`. Selecionado nos cinco folds: `k=60, min_k=3, min_support=3`, sempre `user_based=True` e `cosine`.
-- Relevância: nota real **≥ 4 no teste**. Candidatos: filmes presentes no treino e ainda não avaliados pelo usuário naquele treino. Dez itens, sem corte de nota prevista; desempate por ID.
-- Elegibilidade: histórico no treino, pelo menos dez candidatos e pelo menos um relevante elegível no teste. Exclusões registradas por pessoa e motivo.
-- Precisão@10 é a média por usuário; não distingue posições dentro do conjunto de dez.
+**O SVD apresentou o menor RMSE em todos os folds. A popularidade recuperou mais relevantes observados no top 10 em todos eles.** Assim, a personalização não superou esse baseline no protocolo adotado. A precisão de 13,32% da popularidade corresponde a aproximadamente 1,33 acertos observados por lista.
 
-Leia [o protocolo completo](docs/protocolo_avaliacao.md) e [fontes e licença](docs/fontes_e_licenca.md).
+O ajuste do SVD reduziu o erro de previsão, mas também reduziu a precisão das listas. No KNN, ambas as métricas melhoraram. Esses resultados mostram que prever notas e ordenar recomendações são objetivos distintos; diferenças médias, por si só, não demonstram superioridade estatística.
 
-### Reprodução
+## Como acessar o relatório
 
-Ambiente validado: **Python 3.12.14**, NumPy 1.26.4 e Surprise 1.1.5. As versões principais estão em `requirements.txt`; o ambiente completo em `requirements-lock.txt` e as versões efetivamente usadas em `outputs/versions.json`.
+1. Abra [relatorio_sistemas_recomendacao_movielens.html](relatorio_sistemas_recomendacao_movielens.html).
+2. No GitHub, use **Download raw file** para baixar o arquivo.
+3. Abra o HTML em um navegador.
 
-Linux/macOS:
+O relatório funciona localmente, sem instalação e sem conexão à internet. Os links para fontes externas exigem acesso à rede. As abas apresentam metodologia, análise descritiva, SVD, User-Based KNN, avaliação e comparação e conclusão. Há seleção de fold, configuração e usuários de exemplo, pesquisa de filmes e exportação de tabelas derivadas.
+
+## Notebooks e ordem de execução
+
+| Etapa | Notebook | Conteúdo |
+|---|---|---|
+| 1 | [Análise descritiva](notebooks/01_analise_descritiva.ipynb) | Integridade, notas, usuários, filmes, gêneros, anos e esparsidade |
+| 2 | [Fatorização matricial — SVD](notebooks/02_fatorizacao_matricial_svd.ipynb) | Modelo, busca interna, resultados externos, erros e recomendações |
+| 3 | [User-Based KNN e comparação](notebooks/03_user_based_knn_comparacao.ipynb) | Similaridades, vizinhos, fallback, diagnósticos e comparação final |
+
+Execute na ordem acima. Cada notebook lê a base e importa o código compartilhado, sem depender de variáveis deixadas na memória por outro notebook. O terceiro utiliza tabelas produzidas pelo segundo.
+
+## Desenho da avaliação
+
+Os mesmos cinco folds são usados por todos os métodos: **80.000 avaliações para treino e 20.000 para teste** em cada rodada. Dentro de cada treino externo, uma divisão 80/20 compara três configurações por algoritmo. A seleção considera o menor RMSE interno; o teste externo não participa da escolha de parâmetros.
+
+| Modelo | Configuração inicial | Configuração selecionada nos cinco folds |
+|---|---|---|
+| SVD | 50 fatores, 20 épocas, regularização 0,02 | 100 fatores, 30 épocas, regularização 0,08 |
+| User-Based KNN | `k=40, min_k=1, min_support=1` | `k=60, min_k=3, min_support=3` |
+
+A taxa de aprendizagem do SVD é 0,005. O KNN usa `user_based=True` e similaridade `cosine` em ambas as configurações.
+
+Para as listas, um filme é considerado relevante quando recebe **nota real ≥ 4 no teste**. Os candidatos são filmes presentes no treino e ainda não avaliados pelo usuário naquele treino. Cada lista contém dez itens; empates são resolvidos pelo menor ID.
+
+Participam usuários com histórico no treino, pelo menos dez candidatos e ao menos um relevante elegível no teste. O ranking avaliou **929, 925, 921, 930 e 923 usuários** nos folds 1 a 5, respectivamente, sempre os mesmos entre SVD, KNN e popularidade. O RMSE considera todas as 20.000 notas do teste de cada fold.
+
+As fórmulas, sementes, regras de elegibilidade, tratamento de casos desconhecidos e critérios de desempate estão no [protocolo completo](docs/protocolo_avaliacao.md).
+
+## Como reproduzir
+
+### Preparar o ambiente
+
+O ambiente de execução registrado usa **Python 3.12.14**, NumPy 1.26.4 e Surprise 1.1.5. Consulte [requirements.txt](requirements.txt), [requirements-lock.txt](requirements-lock.txt) e [outputs/versions.json](outputs/versions.json).
+
+Clone o repositório e entre na pasta:
 
 ```bash
-python3.12 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-python -m ipykernel install --user --name python3 --display-name "Python 3 (MovieLens)"
-python src/executar_notebooks.py
-python src/verificar_projeto.py
-python src/exportar_entrega.py
+git clone https://github.com/bellaviana4-cyber/sistema-recomendacao.git
+cd sistema-recomendacao
 ```
 
-Windows/PowerShell:
+**Windows / PowerShell:**
 
 ```powershell
 py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
 python -m ipykernel install --user --name python3 --display-name "Python 3 (MovieLens)"
+```
+
+**Linux / macOS:**
+
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python -m ipykernel install --user --name python3 --display-name "Python 3 (MovieLens)"
+```
+
+### Executar e verificar
+
+Com o ambiente ativado:
+
+```bash
 python src/executar_notebooks.py
 python src/verificar_projeto.py
 python src/exportar_entrega.py
 ```
 
-Se a instalação da Surprise precisar compilar em uma plataforma sem wheel compatível, é necessário um compilador C/C++; no Windows, use os Build Tools do Visual Studio. A alternativa é executar no Linux/WSL com as mesmas versões. Não migre para NumPy 2 sem verificar a compatibilidade da extensão compilada.
+O primeiro comando executa os notebooks em ordem. O segundo verifica a integridade e os resultados. O terceiro exporta previsões e recomendações derivadas para auditoria.
 
-Também é possível abrir os notebooks no VS Code ou Jupyter e usar **Restart Kernel and Run All** em cada um, na ordem. Num ambiente que não permita sockets Jupyter:
+Também é possível abrir os notebooks no VS Code ou Jupyter e executar todas as células, reiniciando o kernel entre notebooks. Para ambientes que não permitem sockets Jupyter, o executor oferece:
 
 ```bash
 python src/executar_notebooks.py --inprocess
 ```
 
-Esse modo foi usado na entrega: **InProcessKernelManager do IPython, um novo processo e um novo kernel por notebook**, com captura das mensagens de saída. O modo padrão utiliza `nbclient` e kernels externos. Fixar `OPENBLAS_NUM_THREADS=1` e `OMP_NUM_THREADS=1` aproxima o ambiente dos tempos reportados; tempos de processamento dependem do hardware e incluem verificações do lote.
+<details>
+<summary>Notas sobre instalação e processamento</summary>
 
-A primeira leitura baixa automaticamente o ZIP oficial do MovieLens 100k. A execução requer acesso a `files.grouplens.org`. Dados brutos e notas individuais não são redistribuídos no repositório, conforme o README original. `src/exportar_entrega.py` disponibiliza previsões e recomendações derivadas em CSV gzip **sem notas/timestamps originais**; `row_id` identifica a linha em `u.data` para recuperar a nota localmente.
+A Surprise pode exigir um compilador C/C++ quando não há wheel compatível. No Windows, uma opção é usar os Build Tools do Visual Studio ou executar em Linux/WSL. A extensão compilada foi validada com NumPy 1.x.
 
-### Arquivos e auditoria
+O modo padrão usa `nbclient` e kernels externos. O modo `--inprocess` cria um kernel IPython em um processo separado para cada notebook.
 
-- `src/projeto.py`: leitura, integridade, modelos, folds, seleção, ranking e exemplos compartilhados.
-- `data/splits/`: índices externos/internos NPZ e manifesto com SHA256 de `u.data`.
-- `outputs/tables/`: métricas por fold, ajustes, configurações, exclusões, erros, recomendações, previsões derivadas e comparação.
-- `outputs/figures/`: figuras PNG reutilizáveis.
-- `outputs/verification.json`: resultado das verificações.
+Os tempos registrados dependem do hardware e da implementação. Definir `OPENBLAS_NUM_THREADS=1` e `OMP_NUM_THREADS=1` limita o paralelismo e aproxima o ambiente dos tempos reportados. Treinamento, avaliação e busca interna têm escopos distintos, descritos no protocolo.
 
-A execução recria as previsões completas com notas originais e os históricos dos usuários **localmente**, em arquivos ignorados pelo Git. As previsões/listas derivadas comprimidas podem ser auditadas em conjunto com o download oficial.
+</details>
 
-As verificações cobrem: integridade e junções, pares treino/teste disjuntos, validação interna isolada, igualdade de usuários elegíveis, top 10 sem duplicatas ou itens já avaliados, recálculo das métricas, exemplos manuais e equivalência do processamento em lote com `Surprise.predict`. Os modelos são da Surprise; o lote apenas calcula os mesmos escores com menos chamadas Python, sem mudar fórmulas ou seleção de vizinhos.
+A primeira leitura baixa o ZIP oficial do MovieLens 100k; essa etapa exige conexão com `files.grouplens.org`. Para consultar os resultados já salvos ou usar o relatório, não é necessário treinar novamente os modelos.
 
-### Limitações e interpretação
+## Organização do repositório
 
-A base é histórica, voluntária e já filtrada para ao menos vinte avaliações por pessoa. A divisão aleatória não reproduz recomendação temporal e não avalia adequadamente novos usuários. Itens sem nota no teste não contam como acertos, embora sua relevância seja desconhecida; popularidade pode se beneficiar da maior chance de esses filmes aparecerem no teste. Isso não prova que filmes menos populares sejam irrelevantes.
+| Caminho | Finalidade |
+|---|---|
+| [notebooks/](notebooks/) | Análises executadas e documentadas |
+| [src/projeto.py](src/projeto.py) | Leitura, integridade, modelos, seleção, ranking e exemplos |
+| [src/executar_notebooks.py](src/executar_notebooks.py) | Execução ordenada dos notebooks |
+| [src/verificar_projeto.py](src/verificar_projeto.py) | Verificações de dados, avaliação e resultados |
+| [src/exportar_entrega.py](src/exportar_entrega.py) | Exportação dos resultados derivados |
+| [data/splits/](data/splits/) | Índices de treino/teste e manifesto da base |
+| [outputs/tables/](outputs/tables/) | Métricas, configurações, erros, exclusões, previsões e listas |
+| [outputs/figures/](outputs/figures/) | Gráficos das análises |
+| [docs/](docs/) | Protocolo, resultados, revisão metodológica e fontes |
+| [relatorio_sistemas_recomendacao_movielens.html](relatorio_sistemas_recomendacao_movielens.html) | Relatório interativo standalone |
 
-Média e desvio entre folds não são teste de superioridade estatística. Diversidade, novidade e serendipidade não foram medidas. Fatores latentes não são gêneros identificados e escores não são probabilidades. O diagnóstico do KNN inicial mostra listas frequentemente dominadas por filmes com poucos avaliadores; aumentar suporte e vizinhos mínimos ajudou na configuração escolhida internamente, sem eliminar as limitações do método.
+## Verificações
 
-Para previsão de estrelas, o SVD é a escolha sustentada pelos resultados; para o top 10 sob o desenho adotado, popularidade é o referencial mais forte.
+As verificações registradas em [outputs/verification.json](outputs/verification.json) foram aprovadas. Elas cobrem integridade da base, separação entre treino e teste, isolamento da validação interna, igualdade de usuários elegíveis, listas sem duplicatas ou itens do histórico, recálculo das métricas e equivalência dos escores em lote com a Surprise.
 
-Referência: Harper, F. M.; Konstan, J. A. (2015). *The MovieLens Datasets: History and Context*. DOI: https://doi.org/10.1145/2827872.
+O processamento em lote reutiliza os mesmos fatores, vieses, similaridades e regras dos modelos. As verificações comparam seus escores com `Surprise.predict`.
+
+## Limitações
+
+A base é histórica e reúne usuários voluntários com pelo menos vinte avaliações. A divisão aleatória mede recuperação de avaliações ocultadas, sem reproduzir uma avaliação temporal ou representar adequadamente novos usuários.
+
+Filmes sem nota no teste não contam como acertos, embora sua relevância seja desconhecida. A elegibilidade depende de existir um relevante observado, e filmes populares podem ter maior chance de aparecer no teste. A busca de parâmetros foi pequena e selecionada por RMSE; diversidade, novidade e serendipidade não foram avaliadas.
+
+Essas condições delimitam as conclusões. Fatores latentes não foram interpretados como gêneros, escores não são probabilidades e os desvios entre folds não demonstram superioridade estatística.
+
+## Dados e referências
+
+Os dados brutos, notas originais e históricos individuais completos não são redistribuídos neste repositório. A execução os recupera localmente a partir do download oficial. As previsões exportadas não incluem notas ou timestamps originais; `row_id` permite recuperar a avaliação localmente na ordem de `u.data`. Consulte [fontes e licença](docs/fontes_e_licenca.md) para as condições de uso dos dados.
+
+- [MovieLens 100k — GroupLens](https://grouplens.org/datasets/movielens/100k/).
+- Harper, F. M.; Konstan, J. A. (2015). *The MovieLens Datasets: History and Context*. [DOI: 10.1145/2827872](https://doi.org/10.1145/2827872).
+- [Surprise: fatorização matricial](https://surprise.readthedocs.io/en/stable/matrix_factorization.html), [KNN](https://surprise.readthedocs.io/en/stable/knn_inspired.html) e [similaridades](https://surprise.readthedocs.io/en/stable/similarities.html).
