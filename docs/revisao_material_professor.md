@@ -1,24 +1,10 @@
-# Revisão de aderência ao material do professor
+# Revisão metodológica e validação
 
 Material: Victor Coscrato, Sistemas de Recomendação, Laboratório de Estatística Aplicada — 2026/2. Revisão de 05/10/2026.
 
-## Correspondência com a aula e a tarefa
-
-| Páginas | Conteúdo do professor | Correspondência no projeto |
-|---|---|---|
-| 12–16 | Matriz usuário × item, ausências, feedback, esparsidade e seleção das avaliações | Notebook 01; ausências preservadas e limites da amostra discutidos |
-| 20–21 | Cosseno e média ponderada de vizinhos que avaliaram o item | Notebook 03; KNNBasic, user_based=True, cosine; suporte e fallback explicitados |
-| 23–24 | Fatores latentes, vieses, perda regularizada e SGD | Notebook 02; Surprise SVD com vieses e SGD nas notas observadas |
-| 27–29 | Objetivos distintos, RMSE e Precision@k | Protocolo comum nos notebooks 02 e 03; RMSE de estrelas e listas de dez |
-| 31 | Diversidade, novidade e serendipidade | Discussão de limites, sem afirmar que essas propriedades foram medidas |
-| 33–35 | MovieLens 100k, exploração e bibliotecas | Notebook 01 e Surprise nos modelos |
-| 36 | Exploração; SVD; User-Based KNN; RMSE com CV; Precisão@10; comparação | Atendidos pelos três notebooks executados |
-
-A página 34 cita filtragem por conteúdo como possibilidade; a tarefa específica da página 36 exige SVD e User-Based KNN. Não há necessidade de acrescentar conteúdo, híbridos, BPR, Item-Based KNN, MAE, Recall ou nDCG para cumprir esta entrega.
-
 ## Decisões adicionais do projeto
 
-Cinco folds, semente 2026, relevância definida como nota ≥ 4, catálogo de candidatos do treino, elegibilidade e pequena busca interna são decisões operacionais do projeto. O material não fixa esses detalhes; eles concretizam uma avaliação reproduzível. A Precisão@10 segue a fórmula da página 29 e não depende da posição dos acertos dentro do top 10. A busca escolhe por RMSE; os resultados de ranking avaliam esse procedimento, não o melhor ranking possível de cada algoritmo.
+Cinco folds, semente 2026, relevância definida como nota ≥ 4, catálogo de candidatos do treino, elegibilidade e pequena busca interna são decisões operacionais do projeto. O material não fixa esses detalhes; eles concretizam uma avaliação reproduzível. A precisão no top 10 segue a razão entre relevantes recuperados e dez itens recomendados e não depende da posição dos acertos dentro do top 10. A busca escolhe por RMSE; os resultados de ranking avaliam esse procedimento, não o melhor ranking possível de cada algoritmo.
 
 ## Ajustes aplicados
 
