@@ -1,8 +1,8 @@
-# Material e fontes
+# Fontes e licença
 
-O desenho pedagógico segue Victor Coscrato, **Laboratório de Estatística Aplicada — 2026/2: Sistemas de Recomendação**, PDF de 36 páginas fornecido pela estudante. Páginas 33–36 estabelecem a tarefa MovieLens 100k; páginas 12, 20–24 e 27–31 fundamentam matriz esparsa, KNN, FunkSVD e avaliação. Escopo desta implementação: popularidade, média global, SVD e User-Based KNN. Metadados não entram nos modelos.
+O projeto compara popularidade, média global, SVD e User-Based KNN usando o MovieLens 100k. Metadados são usados para descrição e apresentação dos títulos, sem entrar como preditores dos modelos.
 
-Material: https://teaching.vcoscrato.com/sisrec/?view=print#/title-slide
+Referência de sistemas de recomendação: Victor Coscrato, *Sistemas de Recomendação*, Laboratório de Estatística Aplicada — 2026/2. https://teaching.vcoscrato.com/sisrec/?view=print#/title-slide
 
 Dados: https://grouplens.org/datasets/movielens/100k/
 

@@ -5,7 +5,11 @@
 **Laboratório de Estatística Aplicada — 2026/2 · Professor Victor Coscrato**  
 **Isabella Viana Bambirra · Estatística/UFSCar**
 
-O projeto usa o MovieLens 100k para estudar avaliações explícitas e comparar **SVD/FunkSVD** e **User-Based KNN**, com **popularidade** como referencial de listas e **média global** como referencial de previsão de notas. Segue a atividade das páginas 33–36 e a sequência conceitual do material da disciplina. Metadados servem apenas para descrição e apresentação dos filmes.
+O projeto usa o MovieLens 100k para estudar avaliações explícitas e comparar **SVD/FunkSVD** e **User-Based KNN**, com **popularidade** como referencial de listas e **média global** como referencial de previsão de notas. Metadados servem apenas para descrição e apresentação dos filmes.
+
+### Relatório interativo
+
+O [relatório em HTML](relatorio_sistemas_recomendacao_movielens.html) reúne metodologia, análise descritiva, explicações dos modelos, diagnósticos, comparação e conclusão. Para usar as abas, filtros e exportações, baixe o arquivo e abra-o no navegador. O relatório funciona sem conexão à internet; somente os links para fontes externas exigem acesso à rede.
 
 ### Ordem de leitura
 
@@ -100,6 +104,6 @@ A base é histórica, voluntária e já filtrada para ao menos vinte avaliaçõe
 
 Média e desvio entre folds não são teste de superioridade estatística. Diversidade, novidade e serendipidade não foram medidas. Fatores latentes não são gêneros identificados e escores não são probabilidades. O diagnóstico do KNN inicial mostra listas frequentemente dominadas por filmes com poucos avaliadores; aumentar suporte e vizinhos mínimos ajudou na configuração escolhida internamente, sem eliminar as limitações do método.
 
-Para previsão de estrelas, o SVD é a escolha sustentada pelos resultados; para o top 10 sob o desenho adotado, popularidade é o referencial mais forte. **Nenhum relatório HTML foi gerado nesta etapa.**
+Para previsão de estrelas, o SVD é a escolha sustentada pelos resultados; para o top 10 sob o desenho adotado, popularidade é o referencial mais forte.
 
 Referência: Harper, F. M.; Konstan, J. A. (2015). *The MovieLens Datasets: History and Context*. DOI: https://doi.org/10.1145/2827872.

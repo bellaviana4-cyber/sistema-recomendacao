@@ -57,10 +57,10 @@ Para prever notas, preferimos **SVD**; para recuperar relevantes no top 10 sob e
 
 Essa conclusão está condicionada à amostra histórica, ao catálogo e à divisão aleatória. O desenho não representa plenamente recomendação futura ou cold start real. Popularidade pode se beneficiar da maior probabilidade de filmes conhecidos terem nota no teste; ausência de nota não prova irrelevância. Treinos de folds se sobrepõem, e a busca foi pequena. Diversidade, novidade e serendipidade não foram medidas. Metadados não foram usados como preditores.
 
-## 7. Verificações e entrega
+## 7. Verificações e relatório
 
 Os notebooks foram executados em kernels IPython novos, um processo por notebook, com saídas preservadas. A alternativa em processo foi usada porque o ambiente bloqueou sockets TCP/IPC; o executor também oferece modo padrão `nbclient`.
 
 A auditoria confirmou integridade, pares disjuntos, validação interna isolada, mesmos usuários elegíveis, listas de dez sem itens repetidos ou do histórico, métricas recalculadas das previsões externas e equivalência de escores em lote com Surprise. Exemplos manuais: RMSE=√2,5 e Precisão@10=2/10. Dados brutos e notas originais permanecem fora da redistribuição; previsões derivadas e índices salvos permitem reconstrução com o download oficial.
 
-Não foi gerado relatório HTML nesta etapa. Tabelas e figuras estão organizadas para a sequência descritiva → SVD → KNN → avaliação/comparação → conclusão.
+O [relatório interativo](../relatorio_sistemas_recomendacao_movielens.html) apresenta as tabelas e visualizações na sequência metodologia → análise descritiva → SVD → User-Based KNN → avaliação e comparação → conclusão.
